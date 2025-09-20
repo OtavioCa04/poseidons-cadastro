@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poseidons - Sistema de Clientes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Poseidons</h1>
+            <p>Sistema de Gerenciamento de Clientes</p>
+        </header>
+
+        <main class="main-content">
+            <button id="btnNovo" class="btn-primary">
+                <span class="btn-icon">+</span>
+                Cadastrar Cliente
+            </button>
+
+            <div id="overlay" class="overlay"></div>
+
+            <div id="formCliente" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Novo Cliente</h2>
+                        <button class="close-btn" id="closeForm">&times;</button>
+                    </div>
+                    <form id="clienteForm" class="form">
+                        <div class="form-group">
+                            <input type="text" name="codigo" placeholder="Código" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="loja" placeholder="Loja" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="razao" placeholder="Razão Social" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="tipo" placeholder="Tipo" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="nomefantasia" placeholder="Nome Fantasia" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="cidade" placeholder="Cidade" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="estado" placeholder="Estado" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="telefone" placeholder="Telefone" required>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            Cadastrar Cliente
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <section class="clients-section">
+                <h2 class="section-title">Clientes Cadastrados</h2>
+                <div class="table-container">
+                    <table id="clientesTable" class="clients-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Loja</th>
+                                <th>Razão Social</th>
+                                <th>Tipo</th>
+                                <th>Nome Fantasia</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                                <th>Telefone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dados via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
