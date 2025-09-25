@@ -21,6 +21,7 @@
 
             <div id="overlay" class="overlay"></div>
 
+            <!-- Modal de Cadastro -->
             <div id="formCliente" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -44,18 +45,88 @@
                             <input type="text" name="nomefantasia" placeholder="Nome Fantasia" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="cidade" placeholder="Cidade" required>
+                            <input type="text" name="finalidade" placeholder="Finalidade">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="cnpj" placeholder="CNPJ">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="cep" placeholder="CEP">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="pais" placeholder="País">
                         </div>
                         <div class="form-group">
                             <input type="text" name="estado" placeholder="Estado" required>
                         </div>
                         <div class="form-group">
+                            <input type="text" name="codmunicipio" placeholder="Código Município">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="cidade" placeholder="Cidade" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="endereco" placeholder="Endereço">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="bairro" placeholder="Bairro">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="ddd" placeholder="DDD">
+                        </div>
+                        <div class="form-group">
                             <input type="text" name="telefone" placeholder="Telefone" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" name="abertura" placeholder="Data Abertura">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="contato" placeholder="Contato">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="homepage" placeholder="Homepage">
                         </div>
                         <button type="submit" class="btn-submit">
                             Cadastrar Cliente
                         </button>
                     </form>
+                </div>
+            </div>
+
+            <!-- Modal de Visualização -->
+            <div id="modalViewCliente" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Detalhes do Cliente</h2>
+                        <button class="close-btn" id="closeViewModal">&times;</button>
+                    </div>
+                    <div id="viewContent" class="form">
+                        <!-- Aqui serão preenchidos os dados via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Confirmação de Exclusão -->
+            <div id="modalConfirmDelete" class="modal">
+                <div class="modal-content modal-confirm">
+                    <div class="modal-header">
+                        <h2>⚠️ Confirmar Exclusão</h2>
+                        <button class="close-btn" id="closeConfirmModal">&times;</button>
+                    </div>
+                    <div id="confirmContent" class="confirm-content">
+                        <!-- Dados do cliente serão preenchidos via JS -->
+                    </div>
+                    <div class="modal-actions">
+                        <button id="confirmDeleteBtn" class="btn-danger">
+                            ✖ Sim, Excluir Definitivamente
+                        </button>
+                        <button id="cancelDeleteBtn" class="btn-cancel">
+                            Cancelar
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -73,6 +144,7 @@
                                 <th>Cidade</th>
                                 <th>Estado</th>
                                 <th>Telefone</th>
+                                <th>Ações</th> 
                             </tr>
                         </thead>
                         <tbody>
