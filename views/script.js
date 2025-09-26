@@ -11,6 +11,11 @@ const modalViewCliente = document.getElementById('modalViewCliente');
 const closeViewModal = document.getElementById('closeViewModal');
 const viewContent = document.getElementById('viewContent');
 
+// Elementos do modal de atualização
+const modalEditCliente = document.getElementById('modalEditCliente');
+const closeEditModal = document.getElementById('closeEditModal');
+const editClienteForm = document.getElementById('editClienteForm');
+
 // Elementos do modal de confirmação de exclusão
 const modalConfirmDelete = document.getElementById('modalConfirmDelete');
 const closeConfirmModal = document.getElementById('closeConfirmModal');
@@ -18,8 +23,9 @@ const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 const confirmContent = document.getElementById('confirmContent');
 
-// Variável global para armazenar cliente a ser excluído
+// Variáveis globais
 let clienteParaExcluir = null;
+let clienteParaEditar = null;
 
 // ========== FUNÇÕES DE CONTROLE DOS MODAIS ==========
 
@@ -34,8 +40,10 @@ function fecharTodosModais() {
   formClienteModal.style.display = 'none';
   modalViewCliente.style.display = 'none';
   modalConfirmDelete.style.display = 'none';
+  modalEditCliente.style.display = 'none';
   overlay.style.display = 'none';
   clienteParaExcluir = null;
+  clienteParaEditar = null;
 }
 
 // ========== EVENT LISTENERS DOS MODAIS ==========
@@ -51,11 +59,20 @@ closeForm.addEventListener('click', fecharTodosModais);
 // Fechar modal de visualização
 closeViewModal.addEventListener('click', fecharTodosModais);
 
+// Fechar modal de atualização
+closeEditModal.addEventListener('click', fecharTodosModais);
+
 // Fechar modal de confirmação de exclusão
 closeConfirmModal.addEventListener('click', fecharTodosModais);
 
 // Cancelar exclusão
 cancelDeleteBtn.addEventListener('click', fecharTodosModais);
+
+// Botão cancelar do formulário de atualização
+const btnCancelForm = document.querySelector('.btn-cancel-form');
+if (btnCancelForm) {
+  btnCancelForm.addEventListener('click', fecharTodosModais);
+}
 
 // Fechar modais clicando no overlay
 overlay.addEventListener('click', fecharTodosModais);
@@ -82,7 +99,7 @@ async function carregarClientes() {
       tbody.innerHTML = `
         <tr>
           <td colspan="9" style="text-align: center; padding: 20px; color: #666;">
-            Nenhum cliente cadastrado
+            📋 Nenhum cliente cadastrado
           </td>
         </tr>
       `;
@@ -105,6 +122,7 @@ async function carregarClientes() {
           <select class="action-select" data-id="${cliente.codigo}">
             <option value="">Selecione...</option>
             <option value="visualizar">👁️ Visualizar</option>
+            <option value="atualizar">🔄 Atualizar</option>
             <option value="excluir">🗑️ Excluir</option>
           </select>
         </td>
@@ -119,7 +137,7 @@ async function carregarClientes() {
     tbody.innerHTML = `
       <tr>
         <td colspan="9" style="text-align: center; padding: 20px; color: #ff4d4f;">
-          Erro ao carregar clientes. Verifique a conexão.
+          ❌ Erro ao carregar clientes. Verifique a conexão.
         </td>
       </tr>
     `;
@@ -129,7 +147,7 @@ async function carregarClientes() {
 // ========== FUNÇÃO PARA CADASTRAR CLIENTE ==========
 clienteForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  console.log('📝 Enviando formulário...');
+  console.log('📝 Enviando formulário de cadastro...');
   
   // Coleta dados do formulário
   const formData = new FormData(clienteForm);
@@ -186,28 +204,26 @@ async function visualizarCliente(codigoCliente) {
     
     // Preencher modal com dados do cliente
     viewContent.innerHTML = `
-      <div style="display: grid; gap: 15px;">
-        <p><strong>Código:</strong> ${cliente.codigo || 'N/A'}</p>
-        <p><strong>Loja:</strong> ${cliente.loja || 'N/A'}</p>
-        <p><strong>Razão Social:</strong> ${cliente.razao || 'N/A'}</p>
-        <p><strong>Tipo:</strong> ${cliente.tipo || 'N/A'}</p>
-        <p><strong>Nome Fantasia:</strong> ${cliente.nomefantasia || 'N/A'}</p>
-        <p><strong>Finalidade:</strong> ${cliente.finalidade || 'N/A'}</p>
-        <p><strong>CNPJ:</strong> ${cliente.cnpj || 'N/A'}</p>
-        <p><strong>CEP:</strong> ${cliente.cep || 'N/A'}</p>
-        <p><strong>País:</strong> ${cliente.pais || 'N/A'}</p>
-        <p><strong>Estado:</strong> ${cliente.estado || 'N/A'}</p>
-        <p><strong>Código Município:</strong> ${cliente.codmunicipio || 'N/A'}</p>
-        <p><strong>Cidade:</strong> ${cliente.cidade || 'N/A'}</p>
-        <p><strong>Endereço:</strong> ${cliente.endereco || 'N/A'}</p>
-        <p><strong>Bairro:</strong> ${cliente.bairro || 'N/A'}</p>
-        <p><strong>DDD:</strong> ${cliente.ddd || 'N/A'}</p>
-        <p><strong>Telefone:</strong> ${cliente.telefone || 'N/A'}</p>
-        <p><strong>Data Abertura:</strong> ${cliente.abertura || 'N/A'}</p>
-        <p><strong>Contato:</strong> ${cliente.contato || 'N/A'}</p>
-        <p><strong>Email:</strong> ${cliente.email || 'N/A'}</p>
-        <p><strong>Homepage:</strong> ${cliente.homepage || 'N/A'}</p>
-      </div>
+      <p><strong>Código:</strong> ${cliente.codigo || 'N/A'}</p>
+      <p><strong>Loja:</strong> ${cliente.loja || 'N/A'}</p>
+      <p><strong>Razão Social:</strong> ${cliente.razao || 'N/A'}</p>
+      <p><strong>Tipo:</strong> ${cliente.tipo || 'N/A'}</p>
+      <p><strong>Nome Fantasia:</strong> ${cliente.nomefantasia || 'N/A'}</p>
+      <p><strong>Finalidade:</strong> ${cliente.finalidade || 'N/A'}</p>
+      <p><strong>CNPJ:</strong> ${cliente.cnpj || 'N/A'}</p>
+      <p><strong>CEP:</strong> ${cliente.cep || 'N/A'}</p>
+      <p><strong>País:</strong> ${cliente.pais || 'N/A'}</p>
+      <p><strong>Estado:</strong> ${cliente.estado || 'N/A'}</p>
+      <p><strong>Código Município:</strong> ${cliente.codmunicipio || 'N/A'}</p>
+      <p><strong>Cidade:</strong> ${cliente.cidade || 'N/A'}</p>
+      <p><strong>Endereço:</strong> ${cliente.endereco || 'N/A'}</p>
+      <p><strong>Bairro:</strong> ${cliente.bairro || 'N/A'}</p>
+      <p><strong>DDD:</strong> ${cliente.ddd || 'N/A'}</p>
+      <p><strong>Telefone:</strong> ${cliente.telefone || 'N/A'}</p>
+      <p><strong>Data Abertura:</strong> ${cliente.abertura || 'N/A'}</p>
+      <p><strong>Contato:</strong> ${cliente.contato || 'N/A'}</p>
+      <p><strong>Email:</strong> ${cliente.email || 'N/A'}</p>
+      <p><strong>Homepage:</strong> ${cliente.homepage || 'N/A'}</p>
     `;
     
     // Mostrar modal
@@ -219,7 +235,119 @@ async function visualizarCliente(codigoCliente) {
   }
 }
 
-// ========== FUNÇÃO PARA ABRIR MODAL DE CONFIRMAÇÃO ==========
+// ========== FUNÇÃO PARA ATUALIZAR CLIENTE ==========
+async function atualizarCliente(codigoCliente) {
+  console.log(`🔄 Abrindo modal para atualizar cliente: ${codigoCliente}`);
+  
+  try {
+    const response = await fetch(`/clientes/${codigoCliente}`);
+    
+    if (!response.ok) {
+      throw new Error(`Cliente não encontrado: ${response.status}`);
+    }
+    
+    const cliente = await response.json();
+    clienteParaEditar = cliente;
+    
+    console.log('📋 Dados do cliente para atualização:', cliente);
+    
+    // Preencher formulário de atualização com dados atuais
+    const form = document.getElementById('editClienteForm');
+    if (form) {
+      // Lista de campos para preencher
+      const campos = [
+        'codigo', 'loja', 'razao', 'tipo', 'nomefantasia', 'finalidade',
+        'cnpj', 'cep', 'pais', 'estado', 'codmunicipio', 'cidade',
+        'endereco', 'bairro', 'ddd', 'telefone', 'abertura', 
+        'contato', 'email', 'homepage'
+      ];
+      
+      campos.forEach(campo => {
+        const input = form.querySelector(`[name="${campo}"]`);
+        if (input) {
+          // Formatação especial para data
+          if (campo === 'abertura' && cliente[campo]) {
+            const data = new Date(cliente[campo]);
+            input.value = data.toISOString().split('T')[0];
+          } else {
+            input.value = cliente[campo] || '';
+          }
+        }
+      });
+      
+      // Mostrar modal de atualização
+      mostrarModal(modalEditCliente);
+      console.log('✅ Modal de atualização aberto com dados preenchidos');
+    } else {
+      console.error('❌ Formulário de atualização não encontrado');
+    }
+    
+  } catch (error) {
+    console.error('❌ Erro ao carregar cliente para atualização:', error);
+    alert('❌ Erro ao carregar dados do cliente para atualização.');
+  }
+}
+
+// ========== FUNÇÃO PARA PROCESSAR ATUALIZAÇÃO ==========
+editClienteForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  if (!clienteParaEditar) {
+    console.warn('⚠️ Nenhum cliente selecionado para atualização');
+    alert('⚠️ Erro: Nenhum cliente selecionado para atualização.');
+    return;
+  }
+  
+  console.log('💾 Processando atualização do cliente...');
+  
+  // Coleta dados do formulário de atualização
+  const formData = new FormData(editClienteForm);
+  const dadosAtualizados = Object.fromEntries(formData.entries());
+  
+  console.log('📋 Dados para atualização:', dadosAtualizados);
+  console.log('🎯 Cliente original:', clienteParaEditar);
+  
+  // Mostrar indicador de carregamento
+  const botaoSubmit = editClienteForm.querySelector('button[type="submit"]');
+  const textoOriginal = botaoSubmit.innerHTML;
+  botaoSubmit.innerHTML = '⏳ Atualizando...';
+  botaoSubmit.disabled = true;
+  
+  try {
+    const response = await fetch(`/clientes/${clienteParaEditar.codigo}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dadosAtualizados)
+    });
+    
+    const resultado = await response.json();
+    
+    if (response.ok) {
+      console.log('✅ Cliente atualizado com sucesso:', resultado);
+      alert('✅ Cliente atualizado com sucesso!');
+      
+      // Fechar modal e recarregar tabela
+      fecharTodosModais();
+      await carregarClientes();
+      
+    } else {
+      console.error('❌ Erro na atualização:', resultado);
+      alert(`❌ Erro ao atualizar cliente: ${resultado.error || 'Erro desconhecido'}`);
+    }
+    
+  } catch (error) {
+    console.error('❌ Erro na requisição de atualização:', error);
+    alert('❌ Erro ao atualizar cliente. Verifique sua conexão.');
+  } finally {
+    // Restaurar botão
+    botaoSubmit.innerHTML = textoOriginal;
+    botaoSubmit.disabled = false;
+  }
+});
+
+// ========== FUNÇÃO PARA ABRIR MODAL DE CONFIRMAÇÃO DE EXCLUSÃO ==========
 async function abrirModalConfirmacao(codigoCliente) {
   console.log(`🗑️ Preparando exclusão do cliente: ${codigoCliente}`);
   
@@ -309,6 +437,10 @@ document.addEventListener('change', async (e) => {
         await visualizarCliente(codigoCliente);
         break;
         
+      case 'atualizar':
+        await atualizarCliente(codigoCliente);
+        break;
+        
       case 'excluir':
         await abrirModalConfirmacao(codigoCliente);
         break;
@@ -333,5 +465,3 @@ document.addEventListener('DOMContentLoaded', () => {
 carregarClientes();
 
 console.log('✅ Sistema inicializado com sucesso!');
-// Carregar clientes ao abrir página
-carregarClientes();

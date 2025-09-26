@@ -8,12 +8,11 @@ const path = require('path');
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'views')));
 
-// Página inicial
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// GET - Listar todos os clientes
+//listar todos os clientes
 app.get('/clientes', async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM clientes ORDER BY id DESC');
@@ -24,10 +23,10 @@ app.get('/clientes', async (req, res) => {
     }
 });
 
-// POST - Cadastrar cliente
+//cadastrar cliente
 app.post('/clientes', async (req, res) => {
     try {
-        // Gerar próximo código automaticamente
+        
         const [rows] = await pool.query("SELECT codigo FROM clientes ORDER BY id DESC LIMIT 1");
         let novoCodigo = "C00001";
         if (rows.length > 0) {
@@ -62,7 +61,7 @@ app.post('/clientes', async (req, res) => {
     }
 });
 
-// GET - Buscar cliente pelo código (DEVE vir DEPOIS das rotas específicas)
+// buscar cliente pelo código 
 app.get('/clientes/:codigo', async (req, res) => {
     const { codigo } = req.params;
     try {
@@ -77,7 +76,7 @@ app.get('/clientes/:codigo', async (req, res) => {
     }
 });
 
-// DELETE - Excluir cliente
+//excluir cliente
 app.delete('/clientes/:codigo', async (req, res) => {
     const { codigo } = req.params;
     try {
